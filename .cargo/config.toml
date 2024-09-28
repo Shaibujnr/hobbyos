@@ -1,0 +1,30 @@
+
+[unstable]
+# we need this so that cargo will recompile the core and compiler_builtins
+# libraries on demand rather than use the ones precompiled with the rust
+# compiler. This is because we are using a custom target type. One that isn't
+# known by the rust compiler and therefore the precompiled versions of these libraries
+# are compiled for the known target types supported by rust.
+#
+# The core library contains types such as Option, Result, Iterator which we are going to use
+# in our Os. We need the compiler_builtins because core depends on it.
+build-std = ["core", "compiler_builtins"]
+
+# The rust compiler assumes some functions are available by default in the built in system. Memory functions to
+# be precise like memcpy (to copy data from one memory location to another) or memcmp (to compare data from
+# two memory locations) but the built-in implementation provided by `compiler_builtins` is disabled by default
+# because when we build and run our rust applications, it is linked with a C library that provides the implementation
+# for these and thefore to avoid collision, this is disabled by default. Since we are building an operating system
+# that will run on baremetal without any C library to link we need to enable these implementations using the below.
+# We could also manually implement these functions ourself using the no_mangle like we did with start but it's a very
+# crucial piece of code and it's best to use a well tested implementation while we focus on our os itself.
+build-std-features = ["compiler-builtins-mem"]
+
+
+[build]
+# to prevent adding --target when calling `cargo build`
+target = "x86_64-hobbyos.json"
+
+
+[target.'cfg(target_os = "none")']
+runner = "bootimage runner"
