@@ -12,7 +12,7 @@ use hobbyos::println;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    hobbyos::hlt_loop();
 }
 
 #[cfg(test)]
@@ -31,5 +31,5 @@ pub extern "C" fn _start() -> ! {
     test_main();
 
     println!("It did not crash!");
-    loop {}
+    hobbyos::hlt_loop();
 }
