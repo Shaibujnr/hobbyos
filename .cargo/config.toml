@@ -8,7 +8,7 @@
 #
 # The core library contains types such as Option, Result, Iterator which we are going to use
 # in our Os. We need the compiler_builtins because core depends on it.
-build-std = ["core", "compiler_builtins"]
+build-std = ["core", "compiler_builtins", "alloc"]
 
 # The rust compiler assumes some functions are available by default in the built in system. Memory functions to
 # be precise like memcpy (to copy data from one memory location to another) or memcmp (to compare data from
